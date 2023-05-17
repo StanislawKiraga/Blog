@@ -2,7 +2,7 @@ from flask import Flask, request, redirect, render_template, url_for, flash, ses
 from blog import app
 from blog.models import Entry, db
 from blog.forms import EntryForm, LoginForm
-
+import functools
 
 @app.route("/")
 def index():
@@ -12,8 +12,18 @@ def index():
     return render_template("homepage.html", all_posts=all_posts)
 
 
+def login_required(view_func):
+   @functools.wraps(view_func)
+   def check_permissions(*args, **kwargs):
+       if session.get('logged_in'):
+           return view_func(*args, **kwargs)
+       return redirect(url_for('login', next=request.path))
+   return check_permissions
+
+
 @app.route("/new-post/", methods=["GET", "POST"])
 @app.route('/edit-post/<int:entry_id>', methods=['GET', 'POST'])
+@login_required
 def create_or_edit_entry(entry_id=None):
     if entry_id:
         entry = Entry.query.filter_by(id=entry_id).first_or_404()
