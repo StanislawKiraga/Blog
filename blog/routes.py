@@ -48,8 +48,10 @@ def create_or_edit_entry(entry_id=None):
             return redirect(url_for('index'))
         else:
             errors = form.errors
-
-    return render_template("entry_form.html", form=form, errors=errors)
+    if not entry_id:
+        return render_template("entry_form.html", form=form, errors=errors)
+    else:
+        return render_template('edit_entry.html', form=form, errors=errors)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -74,3 +76,20 @@ def logout():
         session.clear()
         flash('You are logged out.', 'success')
     return redirect(url_for('index'))
+
+@app.route('/drafts', methods=['GET'])
+@login_required
+def list_drafts():
+    drafts = Entry.query.filter_by(is_published=False).order_by(Entry.pub_date.desc())
+
+    return render_template("drafts.html", drafts=drafts)
+
+@app.route('/delete_entry/<int:entry_id>', methods=['POST'])
+def delete_entry(entry_id):
+    entry = Entry.query.filter_by(id=entry_id).first_or_404()
+    if request.method == 'POST':
+        db.session.delete(entry)
+        db.session.commit()
+        flash('Wpis został usunięty!')
+        return redirect(url_for('index'))
+    return render_template('drafts.html')
