@@ -6,7 +6,7 @@
     Dodaj nowy wpis
 </h3>
 
-<form method="POST" action="{{ url_for('create_entry') }}">
+<form method="POST" action="{{ url_for('create_or_edit_entry') }}">
     {{form.hidden_tag()}}
     <div class="form-group">
         <label for="title">Tytuł wpisu</label>
