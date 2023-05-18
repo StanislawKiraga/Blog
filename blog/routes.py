@@ -85,11 +85,12 @@ def list_drafts():
     return render_template("drafts.html", drafts=drafts)
 
 @app.route('/delete_entry/<int:entry_id>', methods=['POST'])
+@login_required
 def delete_entry(entry_id):
     entry = Entry.query.filter_by(id=entry_id).first_or_404()
-    if request.method == 'POST':
+    if entry_id:
         db.session.delete(entry)
         db.session.commit()
         flash('Wpis został usunięty!')
         return redirect(url_for('index'))
-    return render_template('drafts.html')
+    return render_template('homepage.html', entry=entry)
