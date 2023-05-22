@@ -21,20 +21,18 @@ def login_required(view_func):
    return check_permissions
 
 
-@app.route("/new-post/", methods=["GET", "POST"])
-@app.route('/edit-post/<int:entry_id>', methods=['GET', 'POST'])
-@login_required
-def create_or_edit_entry(entry_id=None):
+def entry_form(entry_id=None):
     if entry_id:
         entry = Entry.query.filter_by(id=entry_id).first_or_404()
         form = EntryForm(obj=entry)
     else:
+        entry = None
         form = EntryForm()
 
     errors = None
     if request.method == 'POST':
         if form.validate_on_submit():
-            if entry_id:
+            if entry:
                 form.populate_obj(entry)
             else:
                 entry = Entry(
@@ -43,15 +41,24 @@ def create_or_edit_entry(entry_id=None):
                     is_published=form.is_published.data
                 )
                 db.session.add(entry)
-            flash('Wpis został dodany!')
+                flash('Wpis został utworzony!')
             db.session.commit()
             return redirect(url_for('index'))
         else:
             errors = form.errors
-    if not entry_id:
-        return render_template("entry_form.html", form=form, errors=errors)
-    else:
-        return render_template('edit_entry.html', form=form, errors=errors)
+
+    return render_template('entry_form.html', form=form, errors=errors)
+
+
+@app.route("/new-post/", methods=["GET", "POST"])
+@login_required
+def create_entry():
+    return entry_form()
+
+@app.route('/edit-post/<int:entry_id>', methods=['GET', 'POST'])
+@login_required
+def edit_entry(entry_id):
+    return entry_form(entry_id)
 
 
 @app.route('/login', methods=['GET', 'POST'])
