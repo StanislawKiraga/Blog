@@ -9,7 +9,7 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-from blog import routes, models
+from blog import app, routes, models, forms
 
 @app.shell_context_processor
 def make_shell_context():
@@ -17,3 +17,6 @@ def make_shell_context():
         'db': db,
         'Entry': models.Entry
     }
+
+if __name__ == '__main__':
+    app.run(debug=True)
