@@ -158,10 +158,5 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
-migrations/versions/d1d3db3babc3_.py
-migrations/script.py.mako
-migrations/README
-migrations/env.py
-migrations/alembic.ini
 .vscode/settings.json
 
