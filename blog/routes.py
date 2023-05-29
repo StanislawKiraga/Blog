@@ -101,3 +101,8 @@ def delete_entry(entry_id):
         flash('Wpis został usunięty!')
         return redirect(url_for('index'))
     return render_template('homepage.html', entry=entry)
+
+
+@app.route('/comments', methods=['GET', 'POST'])
+def comments():
+    return render_template('comments.html')
