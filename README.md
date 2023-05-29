@@ -1,3 +1,3 @@
 # Blog
 
-https://projektkoncowy-2.stanislawkiraga.repl.co
+https://blog.stanislawkiraga.repl.co
