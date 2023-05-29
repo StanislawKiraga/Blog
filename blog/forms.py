@@ -23,3 +23,8 @@ class LoginForm(FlaskForm):
         if field.data != Config.ADMIN_PASSWORD:
             raise ValidationError('Invalid password!')
         return field.data
+    
+class CommentForm(FlaskForm):
+    user_name = StringField('User', validators=[DataRequired()])
+    body = TextAreaField('Content', validators=[DataRequired()])
+    
