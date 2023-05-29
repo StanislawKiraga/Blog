@@ -29,6 +29,11 @@
     <p>
         {{ post.body}}
     </p>
+    {% if session.logged_in %}
+        <p>
+            <a href="{{ url_for('comments') }}">Comments</a>
+        </p>
+    {% endif %}
 </div>
 
 {% endfor %}
